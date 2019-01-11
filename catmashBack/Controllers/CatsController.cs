@@ -72,7 +72,7 @@ namespace catmashBack.Controllers
             
         }
 
-        [Route("api/result/{id:string}")]
+        [Route("api/result/{id}")]
         [HttpPut]
         public HttpResponseMessage Result(string id, ResultParameters info)
         {
