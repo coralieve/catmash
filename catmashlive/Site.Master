@@ -47,7 +47,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" runat="server" href="~/">Nom de l'application</a>
+                    <a class="navbar-brand" runat="server" href="~/">CatMashLive</a>
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
@@ -61,6 +61,7 @@
         <div class="container body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
+            <a href="WebFormGame.aspx">Vote</a>
             <hr />
             <footer>
                 <p>&copy; <%: DateTime.Now.Year %> - Mon ASP.NET Application</p>
