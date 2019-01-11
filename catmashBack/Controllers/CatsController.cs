@@ -1,41 +1,98 @@
 ﻿using catmashBack.Models;
-using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using System.Web.Http.Description;
+using Newtonsoft.Json;
+using MongoDB.Bson;
+using System.Net.Http;
+using System.Net;
+using System;
 
 namespace catmashBack.Controllers
 {
     public class CatsController : ApiController
     {
         
-        // GET: api/Cat
+        // GET: api/Cats
         public string Get()
         {
-            return MongoInfo.Instance.GetAllCats();
+            return MongoInfo.Instance.GetAllCats().ToJson();
         }
 
-        // GET: api/Cat/5
-        public string Get(int id)
+        [Route("api/rank")]
+        [HttpGet]
+        public string Rank()
         {
-            return "value";
+            return MongoInfo.Instance.GetAllCats(true).ToJson();
         }
 
-        // POST: api/Cat
-        public void Post([FromBody]string value)
+        [Route("api/game")]
+        [HttpGet]
+        public string Game()
         {
+            return MongoInfo.Instance.GetTwoRandomCat().ToJson();
         }
 
-        // PUT: api/Cat/5
-        public void Put(int id, [FromBody]string value)
+        // GET: api/Cats/c8a
+        public string Get(string id)
         {
+            Cat found = MongoInfo.Instance.GetCat(id);
+            if (found ==  null)
+            {
+                HttpResponseMessage resp = new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    Content = new StringContent(string.Format("No cat with ID = {0}", id)),
+                    ReasonPhrase = "Cat ID Not Found"
+                };
+                throw new HttpResponseException(resp);
+            }
+            return found.ToJson();
         }
 
-        // DELETE: api/Cat/5
+        // POST: api/Cats
+        public HttpResponseMessage Post(Cat value)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
+            try
+            {
+                MongoInfo.Instance.AddNewCat(value);
+            }
+            catch(Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ModelState);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        // PUT: api/Cats/5
+        public void Put(string id, Cat value)
+        {
+            
+        }
+
+        [Route("api/result/{id:string}")]
+        [HttpPut]
+        public HttpResponseMessage Result(string id, ResultParameters info)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
+            try
+            {
+                MongoInfo.Instance.Game(id, info.opponentCatId, info.outcome);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ModelState);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        // DELETE: api/Cats/5
         public void Delete(int id)
         {
         }
