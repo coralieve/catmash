@@ -82,7 +82,11 @@ namespace catmashBack.Controllers
             }
             try
             {
-                MongoInfo.Instance.Game(id, info.opponentCatId, info.outcome);
+
+                if(AuthApp.allAuthorisedAppId.Contains(info.appId))
+                    MongoInfo.Instance.Game(id, info.opponentCatId, info.outcome);
+                else
+                    return Request.CreateErrorResponse(HttpStatusCode.Forbidden, ModelState);
             }
             catch (Exception ex)
             {
