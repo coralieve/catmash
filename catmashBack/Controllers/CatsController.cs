@@ -5,6 +5,7 @@ using MongoDB.Bson;
 using System.Net.Http;
 using System.Net;
 using System;
+using System.Collections.Generic;
 
 namespace catmashBack.Controllers
 {
@@ -12,27 +13,27 @@ namespace catmashBack.Controllers
     {
         
         // GET: api/Cats
-        public string Get()
+        public List<Cat> Get()
         {
-            return MongoInfo.Instance.GetAllCats().ToJson();
+            return MongoInfo.Instance.GetAllCats();
         }
 
         [Route("api/rank")]
         [HttpGet]
-        public string Rank()
+        public List<Cat> Rank()
         {
-            return MongoInfo.Instance.GetAllCats(true).ToJson();
+            return MongoInfo.Instance.GetAllCats(true);
         }
 
         [Route("api/game")]
         [HttpGet]
-        public string Game()
+        public List<Cat> Game()
         {
-            return MongoInfo.Instance.GetTwoRandomCat().ToJson();
+            return MongoInfo.Instance.GetTwoRandomCat();
         }
 
         // GET: api/Cats/c8a
-        public string Get(string id)
+        public Cat Get(string id)
         {
             Cat found = MongoInfo.Instance.GetCat(id);
             if (found ==  null)
@@ -44,7 +45,7 @@ namespace catmashBack.Controllers
                 };
                 throw new HttpResponseException(resp);
             }
-            return found.ToJson();
+            return found;
         }
 
         // POST: api/Cats
