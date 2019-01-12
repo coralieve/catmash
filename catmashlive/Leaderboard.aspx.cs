@@ -13,15 +13,7 @@ namespace catmashlive
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            using (HttpClient cli = new HttpClient())
-            {
-                HttpResponseMessage jsonGame = cli.GetAsync(new Uri(Properties.Settings.Default.backendURL + "/api/rank")).Result;
-                string content = jsonGame.Content.ReadAsStringAsync().Result;
-                List<Cat> catArray = JsonConvert.DeserializeObject<List<Cat>>(content);
-
-                allCats.DataSource = catArray;
-                allCats.DataBind();
-            }
+            
         }
 
         protected void allCats_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -31,6 +23,17 @@ namespace catmashlive
             {
                 var imgCat = e.Item.FindControl("imgCat") as Image;
                 imgCat.ImageUrl = cat.url;
+            }
+        }
+
+        public List<Cat> GetRankedCats()
+        {
+            using (HttpClient cli = new HttpClient())
+            {
+                HttpResponseMessage jsonGame = cli.GetAsync(new Uri(Properties.Settings.Default.backendURL + "/api/rank")).Result;
+                string content = jsonGame.Content.ReadAsStringAsync().Result;
+                List<Cat> catArray = JsonConvert.DeserializeObject<List<Cat>>(content);
+                return catArray;
             }
         }
     }
