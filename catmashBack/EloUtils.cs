@@ -10,6 +10,7 @@ namespace catmashBack
     /// </summary>
     public static class EloUtils
     {
+        public const int ELONEWCOMER = 1000;
         public const int NBGAMENEWCOMER = 10;
         public const int KNEWCOMER = 20;
         public const int KCLASSIC = 40;

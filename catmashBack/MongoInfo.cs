@@ -46,6 +46,19 @@ namespace catmashBack
             return found.ToList<Cat>();
         }
 
+        public List<Cat> Reset(string mdp)
+        {
+            if (mdp == "OK")
+            {
+                IMongoCollection<Cat> catscol = _currentDataBase.GetCollection<Cat>("CATS");
+
+                UpdateDefinition<Cat> updateDef = Builders<Cat>.Update.Set(a => a.nbGame, 0).Set(b => b.elo, EloUtils.ELONEWCOMER).Set(b => b.k, EloUtils.KNEWCOMER);
+                catscol.UpdateMany(Builders<Cat>.Filter.Empty, updateDef);
+            }
+
+            return GetAllCats(true);
+        }
+
         public List<Cat> GetTwoRandomCat()
         {
             IMongoCollection<Cat> catscol = _currentDataBase.GetCollection<Cat>("CATS");
@@ -80,8 +93,8 @@ namespace catmashBack
         {
             IMongoCollection<Cat> catscol = _currentDataBase.GetCollection<Cat>("CATS");
 
-            UpdateDefinition<Cat> updateDef = Builders<Cat>.Update.Set(a => a.nbGame, cat.nbGame++).Set(b => b.elo, elo);
-            if (cat.nbGame++ >= EloUtils.NBGAMENEWCOMER)
+            UpdateDefinition<Cat> updateDef = Builders<Cat>.Update.Set(a => a.nbGame, cat.nbGame+1).Set(b => b.elo, elo);
+            if (cat.nbGame+1 >= EloUtils.NBGAMENEWCOMER)
                 updateDef.Set(c => c.k, EloUtils.KCLASSIC);
             catscol.UpdateOne(Builders<Cat>.Filter.Eq(x => x.Id, cat.Id), updateDef);
         }

@@ -18,7 +18,7 @@ namespace catmashBack.Models
         [BsonElement(elementName: "url")]
         public string url { get; set; }
         [BsonElement(elementName: "elo")]
-        [BsonDefaultValue(0)]
+        [BsonDefaultValue(EloUtils.ELONEWCOMER)]
         public int elo { get; set; }
         [BsonElement(elementName: "k")]
         [BsonDefaultValue(EloUtils.KNEWCOMER)]

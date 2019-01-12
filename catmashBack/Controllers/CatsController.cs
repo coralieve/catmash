@@ -25,6 +25,13 @@ namespace catmashBack.Controllers
             return MongoInfo.Instance.GetAllCats(true);
         }
 
+        [Route("api/reset")]
+        [HttpGet]
+        public List<Cat> Reset(string mdp)
+        {
+            return MongoInfo.Instance.Reset(mdp);
+        }
+
         [Route("api/game")]
         [HttpGet]
         public List<Cat> Game()
