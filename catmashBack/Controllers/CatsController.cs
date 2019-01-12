@@ -1,41 +1,110 @@
 ﻿using catmashBack.Models;
-using MongoDB.Driver;
+using System.Web.Http;
+using Newtonsoft.Json;
+using MongoDB.Bson;
+using System.Net.Http;
+using System.Net;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using System.Web.Http.Description;
 
 namespace catmashBack.Controllers
 {
     public class CatsController : ApiController
     {
         
-        // GET: api/Cat
-        public string Get()
+        // GET: api/Cats
+        public List<Cat> Get()
         {
             return MongoInfo.Instance.GetAllCats();
         }
 
-        // GET: api/Cat/5
-        public string Get(int id)
+        [Route("api/rank")]
+        [HttpGet]
+        public List<Cat> Rank()
         {
-            return "value";
+            return MongoInfo.Instance.GetAllCats(true);
         }
 
-        // POST: api/Cat
-        public void Post([FromBody]string value)
+        [Route("api/reset")]
+        [HttpGet]
+        public List<Cat> Reset(string mdp)
         {
+            return MongoInfo.Instance.Reset(mdp);
         }
 
-        // PUT: api/Cat/5
-        public void Put(int id, [FromBody]string value)
+        [Route("api/game")]
+        [HttpGet]
+        public List<Cat> Game()
         {
+            return MongoInfo.Instance.GetTwoRandomCat();
         }
 
-        // DELETE: api/Cat/5
+        // GET: api/Cats/c8a
+        public Cat Get(string id)
+        {
+            Cat found = MongoInfo.Instance.GetCat(id);
+            if (found ==  null)
+            {
+                HttpResponseMessage resp = new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    Content = new StringContent(string.Format("No cat with ID = {0}", id)),
+                    ReasonPhrase = "Cat ID Not Found"
+                };
+                throw new HttpResponseException(resp);
+            }
+            return found;
+        }
+
+        // POST: api/Cats
+        public HttpResponseMessage Post(Cat value)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
+            try
+            {
+                MongoInfo.Instance.AddNewCat(value);
+            }
+            catch(Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ModelState);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        // PUT: api/Cats/5
+        public void Put(string id, Cat value)
+        {
+            
+        }
+
+        [Route("api/result/{id}")]
+        [HttpPut]
+        public HttpResponseMessage Result(string id, ResultParameters info)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
+            try
+            {
+
+                if(AuthApp.allAuthorisedAppId.Contains(info.appId))
+                    MongoInfo.Instance.Game(id, info.opponentCatId, info.outcome);
+                else
+                    return Request.CreateErrorResponse(HttpStatusCode.Forbidden, ModelState);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ModelState);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        // DELETE: api/Cats/5
         public void Delete(int id)
         {
         }
