@@ -7,7 +7,7 @@
         </div>
         <div class="col-md-6 parent">
 
-            <asp:ImageButton runat="server" id="btnRightCat" CssClass="parent img" />
+            <asp:ImageButton runat="server" id="btnRightCat" CssClass="parent img" OnClick="rightCat_Click"/>
         </div>
     </div>
     <div class="row">
