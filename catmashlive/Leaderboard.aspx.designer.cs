@@ -10,15 +10,15 @@
 namespace catmashlive {
     
     
-    public partial class SiteMaster {
+    public partial class Leaderboard {
         
         /// <summary>
-        /// Contrôle MainContent.
+        /// Contrôle allCats.
         /// </summary>
         /// <remarks>
         /// Champ généré automatiquement.
         /// Pour modifier, déplacez la déclaration de champ du fichier de concepteur dans le fichier code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder MainContent;
+        protected global::System.Web.UI.WebControls.Repeater allCats;
     }
 }
