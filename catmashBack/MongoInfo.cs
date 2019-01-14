@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using MongoDB.Driver.Linq;
+using System.Configuration;
 
 namespace catmashBack
 {
@@ -23,7 +24,7 @@ namespace catmashBack
 
         private MongoInfo()
         {
-            _currentClient = new MongoClient("mongodb+srv://cat:miaou@clustercatmashllive-rj7t7.azure.mongodb.net/");
+            _currentClient = new MongoClient(ConfigurationManager.AppSettings["mongoString"]);
             _currentDataBase = _currentClient.GetDatabase("MASH");
         }
 

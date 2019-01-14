@@ -25,7 +25,7 @@ namespace catmashlive.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://catmashback20190110030108.azurewebsites.net")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://catmashback20190110030108.azurewebsites.net/")]
         public string backendURL {
             get {
                 return ((string)(this["backendURL"]));

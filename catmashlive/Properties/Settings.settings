@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="backendURL" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">https://catmashback20190110030108.azurewebsites.net</Value>
+      <Value Profile="(Default)">https://catmashback20190110030108.azurewebsites.net/</Value>
     </Setting>
   </Settings>
 </SettingsFile>
